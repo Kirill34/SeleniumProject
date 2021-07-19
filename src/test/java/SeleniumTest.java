@@ -12,7 +12,7 @@ public class SeleniumTest {
     @BeforeClass
     public static void setup() {
         System.setProperty("webdriver.gecko.driver", "C:/webdrivers/geckodriver.exe");
-        driver = new FirefoxDriver();
+        driver = DriverFactory.getDriver(DriverType.FIREFOX);
 
     }
 
