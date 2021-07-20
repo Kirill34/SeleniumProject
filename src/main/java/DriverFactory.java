@@ -7,6 +7,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 enum DriverType {
     CHROME,
@@ -24,7 +25,9 @@ public class DriverFactory {
         System.setProperty("webdriver.chrome.driver", "/path/to/chromedriver");
         ChromeOptions options = new ChromeOptions();
         options.addArguments("incognito");
-        return new ChromeDriver(options);
+        ChromeDriver driver = new ChromeDriver(options);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        return  driver;
     };
 
     //firefox driver supplier
@@ -32,7 +35,9 @@ public class DriverFactory {
         System.setProperty("webdriver.gecko.driver", "C:/webdrivers/geckodriver.exe");
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("-private");
-        return new FirefoxDriver(options);
+        FirefoxDriver driver = new FirefoxDriver(options);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        return driver;
     };
 
     //add more suppliers here
