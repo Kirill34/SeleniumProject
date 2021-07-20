@@ -27,6 +27,7 @@ public class DriverFactory {
         options.addArguments("incognito");
         ChromeDriver driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.manage().window().fullscreen();
         return  driver;
     };
 
@@ -37,6 +38,7 @@ public class DriverFactory {
         options.addArguments("-private");
         FirefoxDriver driver = new FirefoxDriver(options);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.manage().window().fullscreen();
         return driver;
     };
 
