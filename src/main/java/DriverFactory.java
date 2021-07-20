@@ -1,7 +1,9 @@
 import com.google.common.base.Supplier;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,13 +22,17 @@ public class DriverFactory {
     //chrome driver supplier
     private static final Supplier<WebDriver> chromeDriverSupplier = () -> {
         System.setProperty("webdriver.chrome.driver", "/path/to/chromedriver");
-        return new ChromeDriver();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("incognito");
+        return new ChromeDriver(options);
     };
 
     //firefox driver supplier
     private static final Supplier<WebDriver> firefoxDriverSupplier = () -> {
         System.setProperty("webdriver.gecko.driver", "C:/webdrivers/geckodriver.exe");
-        return new FirefoxDriver();
+        FirefoxOptions options = new FirefoxOptions();
+        options.addArguments("-private");
+        return new FirefoxDriver(options);
     };
 
     //add more suppliers here
