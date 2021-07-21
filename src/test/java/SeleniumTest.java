@@ -14,10 +14,12 @@ import java.util.concurrent.TimeUnit;
 public class SeleniumTest {
     private static WebDriver driver;
     private Logger logger = LogManager.getLogger(SeleniumTest.class);
+
     @BeforeClass
     public static void setup() {
+        String env = System.getProperty("browser", "chrome");
         System.setProperty("webdriver.gecko.driver", "C:/webdrivers/geckodriver.exe");
-        driver = DriverFactory.getDriver("firefox");
+        driver = DriverFactory.getDriver(env.toLowerCase());
         driver.manage().window().fullscreen();
     }
 
