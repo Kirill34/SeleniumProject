@@ -1,58 +1,41 @@
-import com.google.common.base.Supplier;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-enum DriverType {
-    CHROME,
-    FIREFOX,
-    SAFARI,
-    IE;
-}
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.opera.OperaDriver;
 
 public class DriverFactory {
+    private static Logger logger = LogManager.getLogger(DriverFactory.class);
 
-    private static final Map<DriverType, Supplier<WebDriver>> driverMap = new HashMap<>();
+    public static WebDriver getDriver(String browserName) {
+        switch (browserName) {
+            case "chrome":
+                WebDriverManager.chromedriver().setup();
+                logger.info("Драйвер для браузера Google Chrome");
+                return new ChromeDriver();
+            case "firefox" :
+                WebDriverManager.firefoxdriver().setup();
+                logger.info("Драйвер для браузера Mozilla Firefox");
+                return new FirefoxDriver();
+            case "edge" :
+                WebDriverManager.edgedriver().setup();
+                logger.info("Драйвер для браузера Microsoft Edge");
+                return new EdgeDriver();
+            case "explorer" :
+                WebDriverManager.iedriver().setup();
+                logger.info("Драйвер для браузера Microsoft Internet Explorer");
+                return new InternetExplorerDriver();
+            case "opera" :
+                WebDriverManager.operadriver().setup();
+                logger.info("Драйвер для браузера Opera");
+                return new OperaDriver();
 
-    //chrome driver supplier
-    private static final Supplier<WebDriver> chromeDriverSupplier = () -> {
-        System.setProperty("webdriver.chrome.driver", "/path/to/chromedriver");
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("incognito");
-        ChromeDriver driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.manage().window().fullscreen();
-        return  driver;
-    };
-
-    //firefox driver supplier
-    private static final Supplier<WebDriver> firefoxDriverSupplier = () -> {
-        System.setProperty("webdriver.gecko.driver", "C:/webdrivers/geckodriver.exe");
-        FirefoxOptions options = new FirefoxOptions();
-        options.addArguments("-private");
-        FirefoxDriver driver = new FirefoxDriver(options);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.manage().window().fullscreen();
-        return driver;
-    };
-
-    //add more suppliers here
-
-    //add all the drivers into a map
-    static{
-        driverMap.put(DriverType.CHROME, chromeDriverSupplier);
-        driverMap.put(DriverType.FIREFOX, firefoxDriverSupplier);
+            default:
+                throw new RuntimeException("Incorrect browser name");
+        }
     }
-
-    //return a new driver from the map
-    public static final WebDriver getDriver(DriverType type){
-        return driverMap.get(type).get();
-    }
-
 }

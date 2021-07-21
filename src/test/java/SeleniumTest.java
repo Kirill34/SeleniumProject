@@ -17,8 +17,8 @@ public class SeleniumTest {
     @BeforeClass
     public static void setup() {
         System.setProperty("webdriver.gecko.driver", "C:/webdrivers/geckodriver.exe");
-        driver = DriverFactory.getDriver(DriverType.FIREFOX);
-
+        driver = DriverFactory.getDriver("firefox");
+        driver.manage().window().fullscreen();
     }
 
     @BeforeEach
@@ -30,6 +30,7 @@ public class SeleniumTest {
     @AfterEach
     public void setDown()
     {
+
         logger.info("Драйвер остановлен!");
     }
 
