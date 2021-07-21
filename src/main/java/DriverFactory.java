@@ -3,8 +3,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.opera.OperaDriver;
 
@@ -16,11 +18,15 @@ public class DriverFactory {
             case "chrome":
                 WebDriverManager.chromedriver().setup();
                 logger.info("Драйвер для браузера Google Chrome");
-                return new ChromeDriver();
+                ChromeOptions chOptions = new ChromeOptions();
+                chOptions.addArguments("incognito");
+                return new ChromeDriver(chOptions);
             case "firefox" :
                 WebDriverManager.firefoxdriver().setup();
                 logger.info("Драйвер для браузера Mozilla Firefox");
-                return new FirefoxDriver();
+                FirefoxOptions fOptions = new FirefoxOptions();
+                fOptions.addArguments("-private");
+                return new FirefoxDriver(fOptions);
             case "edge" :
                 WebDriverManager.edgedriver().setup();
                 logger.info("Драйвер для браузера Microsoft Edge");
