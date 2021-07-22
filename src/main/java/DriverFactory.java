@@ -1,6 +1,7 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -20,6 +21,7 @@ public class DriverFactory {
                 logger.info("Драйвер для браузера Google Chrome");
                 ChromeOptions chOptions = new ChromeOptions();
                 chOptions.addArguments("incognito");
+                chOptions.setPageLoadStrategy(PageLoadStrategy.NORMAL);
                 return new ChromeDriver(chOptions);
             case "firefox" :
                 WebDriverManager.firefoxdriver().setup();
