@@ -43,12 +43,28 @@ public class SeleniumTest {
 
     @Test
     public void FirstTest() {
+
         driver.get("https://www.dns-shop.ru/");
+        driver.manage().window().fullscreen();
         logger.info(driver.getTitle());
         logger.info(driver.getCurrentUrl());
-        WebElement element= driver.findElement(By.xpath("//*[@id=\"homepage-desktop-menu-wrap\"]/div/div[1]/div[1]/a"));
+
+        String buttonok = "//a[normalize-space(text())='Да']";
+        WebElement elementok = driver.findElement(By.className("btn-additional"));
+        logger.info("WebElement: " + elementok.getTagName() + " = " + elementok.getText());
+        elementok.click();
+        logger.info("Закрыто подтверждение города");
+        try {
+            Thread.sleep(5000);
+        }
+        catch (InterruptedException e)
+        {
+
+        }
+        WebElement element= null;
+        element=driver.findElement(By.className("menu-desktop__root-title"));
         element.click();
-        List<WebElement> categories=driver.findElements(By.className("subcategory__mobile-title"));
+        List<WebElement> categories=driver.findElements(By.className("subcategory__item"));
         for ( WebElement category:categories) {
             logger.info(category.getText());
         }
