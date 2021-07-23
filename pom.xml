@@ -52,7 +52,12 @@
             <version>3.7.0</version>
         </dependency>
 
-
+        <!-- https://mvnrepository.com/artifact/ru.stqa.selenium/webdriver-factory -->
+        <dependency>
+            <groupId>ru.stqa.selenium</groupId>
+            <artifactId>webdriver-factory</artifactId>
+            <version>4.4</version>
+        </dependency>
 
     </dependencies>
     <properties>
