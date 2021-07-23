@@ -76,6 +76,13 @@ public class SeleniumTest {
 
     @AfterClass
     public static void tearDown() {
+        try {
+            Thread.sleep(10000);
+        }
+        catch (InterruptedException e)
+        {
+
+        }
         driver.quit();
     }
 }
