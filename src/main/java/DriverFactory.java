@@ -22,6 +22,7 @@ public class DriverFactory {
                 ChromeOptions chOptions = new ChromeOptions();
                 chOptions.addArguments("incognito");
                 chOptions.setPageLoadStrategy(PageLoadStrategy.NORMAL);
+                chOptions.addArguments("--start-maximized");
                 return new ChromeDriver(chOptions);
             case "firefox" :
                 WebDriverManager.firefoxdriver().setup();
