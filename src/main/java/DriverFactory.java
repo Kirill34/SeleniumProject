@@ -14,7 +14,20 @@ import org.openqa.selenium.opera.OperaDriver;
 public class DriverFactory {
     private static Logger logger = LogManager.getLogger(DriverFactory.class);
 
-    public static WebDriver getDriver(String browserName) {
+    public static WebDriver getDriver(String browserName, String strategy) {
+        PageLoadStrategy plStrategy = PageLoadStrategy.EAGER;
+        switch (strategy)
+        {
+            case "none":
+                plStrategy=PageLoadStrategy.NONE;
+                break;
+            case "normal":
+                plStrategy=PageLoadStrategy.NORMAL;
+                break;
+            case "eager":
+                plStrategy=PageLoadStrategy.EAGER;
+                break;
+        }
         switch (browserName) {
             case "chrome":
                 WebDriverManager.chromedriver().setup();

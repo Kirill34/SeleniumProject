@@ -15,6 +15,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 public class SeleniumTest {
     private static WebDriver driver;
@@ -23,8 +24,9 @@ public class SeleniumTest {
     @BeforeClass
     public static void setup() {
         String env = System.getProperty("browser", "chrome");
+        String strategy = System.getProperty("option","none");
         System.setProperty("webdriver.gecko.driver", "C:/webdrivers/geckodriver.exe");
-        driver = DriverFactory.getDriver(env.toLowerCase());
+        driver = DriverFactory.getDriver(env.toLowerCase(), strategy.toLowerCase());
         driver.manage().window().fullscreen();
     }
 
