@@ -34,7 +34,7 @@ public class DriverFactory {
                 logger.info("Драйвер для браузера Google Chrome");
                 ChromeOptions chOptions = new ChromeOptions();
                 chOptions.addArguments("incognito");
-                chOptions.setPageLoadStrategy(PageLoadStrategy.NORMAL);
+                chOptions.setPageLoadStrategy(plStrategy);
                 chOptions.addArguments("--start-maximized");
                 return new ChromeDriver(chOptions);
             case "firefox" :
@@ -42,6 +42,7 @@ public class DriverFactory {
                 logger.info("Драйвер для браузера Mozilla Firefox");
                 FirefoxOptions fOptions = new FirefoxOptions();
                 fOptions.addArguments("-private");
+                fOptions.setPageLoadStrategy(plStrategy);
                 return new FirefoxDriver(fOptions);
             case "edge" :
                 WebDriverManager.edgedriver().setup();
