@@ -23,6 +23,7 @@ public class SeleniumTest {
 
     @BeforeClass
     public static void setup() {
+
         String env = System.getProperty("browser", "chrome");
         String strategy = System.getProperty("option","none");
         System.setProperty("webdriver.gecko.driver", "C:/webdrivers/geckodriver.exe");
