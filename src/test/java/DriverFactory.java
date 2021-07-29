@@ -2,6 +2,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.PageLoadStrategy;
+import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -10,6 +11,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.opera.OperaDriver;
+import org.openqa.selenium.remote.CapabilityType;
 
 public class DriverFactory {
     private static Logger logger = LogManager.getLogger(DriverFactory.class);
@@ -36,6 +38,8 @@ public class DriverFactory {
                 chOptions.addArguments("incognito");
                 chOptions.setPageLoadStrategy(plStrategy);
                 chOptions.addArguments("--start-maximized");
+                chOptions.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.DISMISS);
+                chOptions.setCapability(CapabilityType.SUPPORTS_JAVASCRIPT, false);
                 return new ChromeDriver(chOptions);
             case "firefox" :
                 WebDriverManager.firefoxdriver().setup();
@@ -43,6 +47,8 @@ public class DriverFactory {
                 FirefoxOptions fOptions = new FirefoxOptions();
                 fOptions.addArguments("-private");
                 fOptions.setPageLoadStrategy(plStrategy);
+                fOptions.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.DISMISS);
+                fOptions.setCapability(CapabilityType.SUPPORTS_JAVASCRIPT, false);
                 return new FirefoxDriver(fOptions);
             case "edge" :
                 WebDriverManager.edgedriver().setup();
