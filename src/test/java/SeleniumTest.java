@@ -73,10 +73,12 @@ public class SeleniumTest {
         }
 
         Assert.assertTrue(true);
+        logger.info( driver.manage().getCookies());
     }
 
     @AfterClass
     public static void tearDown() {
+
         try {
             Thread.sleep(10000);
         }
