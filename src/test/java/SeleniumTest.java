@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -48,9 +49,11 @@ public class SeleniumTest {
     public void FirstTest() {
 
         driver.get("https://www.dns-shop.ru/");
+        driver.manage().addCookie(new Cookie("cookie2","value2"));
         driver.manage().window().fullscreen();
         logger.info(driver.getTitle());
         logger.info(driver.getCurrentUrl());
+
 
         String buttonok = "//a[normalize-space(text())='Да']";
         WebElement elementok = driver.findElement(By.className("btn-additional"));
