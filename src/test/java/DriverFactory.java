@@ -39,7 +39,7 @@ public class DriverFactory {
                 chOptions.setPageLoadStrategy(plStrategy);
                 chOptions.addArguments("--start-maximized");
                 chOptions.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.DISMISS);
-                chOptions.setCapability(CapabilityType.SUPPORTS_JAVASCRIPT, false);
+                chOptions.setCapability(CapabilityType.SUPPORTS_JAVASCRIPT, true);
                 return new ChromeDriver(chOptions);
             case "firefox" :
                 WebDriverManager.firefoxdriver().setup();
@@ -48,7 +48,7 @@ public class DriverFactory {
                 fOptions.addArguments("-private");
                 fOptions.setPageLoadStrategy(plStrategy);
                 fOptions.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.DISMISS);
-                fOptions.setCapability(CapabilityType.SUPPORTS_JAVASCRIPT, false);
+                fOptions.setCapability(CapabilityType.SUPPORTS_JAVASCRIPT, true);
                 return new FirefoxDriver(fOptions);
             case "edge" :
                 WebDriverManager.edgedriver().setup();
