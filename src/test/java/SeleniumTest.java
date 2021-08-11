@@ -10,6 +10,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.Locatable;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.imageio.ImageIO;
@@ -19,6 +21,8 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+
 public class SeleniumTest {
     private static WebDriver driver;
     private Logger logger = LogManager.getLogger(SeleniumTest.class);
@@ -106,6 +110,38 @@ public class SeleniumTest {
         {
             logger.info("Не удалось сделать скриншот");
         }
+        //WebElement samsung = driver.findElement(By.xpath("/html/body/div[1]/div/div[3]/div[1]/div/div[3]/div[1]/div[5]/div/div/div[2]/label[20]/span[2]"));
+
+        FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).ignoring(NoSuchElementException.class);
+        ((JavascriptExecutor)driver).executeScript("window.scroll(0,800);");
+        WebElement samsung = wait.until(new Function<WebDriver, WebElement>() {
+            public WebElement apply(WebDriver driver)
+            {
+                return driver.findElement(By.xpath("/html/body/div[1]/div/div[3]/div[1]/div/div[3]/div[1]/div[5]/div/div/div[2]/label[20]/span[2]"));
+            }
+        });
+       // ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();",samsung);
+        samsung.click();
+
+        WebElement memory = driver.findElement(By.xpath("/html/body/div[1]/div/div[3]/div[1]/div/div[3]/div[1]/div[7]/a"));
+        //((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();",memory);
+        memory.click();
+        ((JavascriptExecutor)driver).executeScript("window.scroll(0,1000);");
+
+        WebElement gb8 = driver.findElement(By.xpath("/html/body/div[1]/div/div[3]/div[1]/div/div[3]/div[1]/div[7]/div/div/div[2]/label[2]"));
+        gb8.click();
+        WebElement apply_btn = driver.findElement(By.xpath("/html/body/div[1]/div/div[3]/div[1]/div/div[3]/div[2]/div/button[1]"));
+        apply_btn.click();
+        /**/
+
+        try {
+            Thread.sleep(10000);
+        }
+        catch (InterruptedException e)
+        {
+
+        }
+        Assert.assertTrue(true);
     }
 
     @AfterClass
