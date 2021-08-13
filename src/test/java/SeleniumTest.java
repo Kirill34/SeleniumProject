@@ -11,6 +11,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.Locatable;
+import org.openqa.selenium.support.events.WebDriverEventListener;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -111,7 +112,8 @@ public class SeleniumTest {
             logger.info("Не удалось сделать скриншот");
         }
         //WebElement samsung = driver.findElement(By.xpath("/html/body/div[1]/div/div[3]/div[1]/div/div[3]/div[1]/div[5]/div/div/div[2]/label[20]/span[2]"));
-
+        WebElement allProducts = driver.findElement(By.xpath("/html/body/div[1]/div/div[3]/div[1]/div/div[3]/div[1]/div[1]/div/div/div[2]/label[3]/span"));
+        allProducts.click();
         FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).ignoring(NoSuchElementException.class);
         ((JavascriptExecutor)driver).executeScript("window.scroll(0,800);");
         WebElement samsung = wait.until(new Function<WebDriver, WebElement>() {
@@ -132,8 +134,41 @@ public class SeleniumTest {
         gb8.click();
         WebElement apply_btn = driver.findElement(By.xpath("/html/body/div[1]/div/div[3]/div[1]/div/div[3]/div[2]/div/button[1]"));
         apply_btn.click();
-        /**/
 
+        try {
+            Thread.sleep(5000);
+        }
+        catch (InterruptedException e)
+        {
+
+        }
+
+        WebElement sortVariant = driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/div[2]/div[1]/div[2]/a/span[1]"));
+        sortVariant.click();
+        WebElement firstExpensive = driver.findElement(By.xpath("/html/body/div[5]/div/label[2]/span"));
+        firstExpensive.click();
+
+        try {
+            Thread.sleep(5000);
+        }
+        catch (InterruptedException e)
+        {
+
+        }
+        WebElement firstItem = driver.findElement(By.className("catalog-product__name"));
+        String href=firstItem.getAttribute("href");
+        driver.get(href);
+        try {
+            File file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+            BufferedImage image = ImageIO.read(file);
+            ImageIO.write(image, "png", new File("screenshot2.png"));
+            Assert.assertTrue(true);
+        }
+        catch (java.io.IOException e)
+        {
+            logger.info("Не удалось сделать скриншот");
+        }
+       // firstItem.click();
         try {
             Thread.sleep(10000);
         }
