@@ -158,6 +158,13 @@ public class SeleniumTest {
         WebElement firstItem = driver.findElement(By.className("catalog-product__name"));
         String href=firstItem.getAttribute("href");
         driver.get(href);
+
+        boolean pageLoaded = false;
+        while (!pageLoaded) {
+            Boolean loaded = (Boolean) ((JavascriptExecutor) driver).executeScript(" return (document.readyState === \"complete\")");
+            pageLoaded=loaded.booleanValue();
+        }
+
         try {
             File file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             BufferedImage image = ImageIO.read(file);
