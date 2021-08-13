@@ -1,3 +1,4 @@
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.AfterClass;
@@ -12,6 +13,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.Locatable;
 import org.openqa.selenium.support.events.WebDriverEventListener;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -26,6 +29,7 @@ import java.util.function.Function;
 
 public class SeleniumTest {
     private static WebDriver driver;
+    private static WebDriverWait wait;
     private Logger logger = LogManager.getLogger(SeleniumTest.class);
 
     @BeforeClass
@@ -37,6 +41,7 @@ public class SeleniumTest {
         driver = DriverFactory.getDriver(env.toLowerCase(), strategy.toLowerCase());
         driver.manage().window().fullscreen();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        wait = new WebDriverWait(driver, 10);
     }
 
     @BeforeEach
@@ -124,7 +129,6 @@ public class SeleniumTest {
         });
        // ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();",samsung);
         samsung.click();
-
         WebElement memory = driver.findElement(By.xpath("/html/body/div[1]/div/div[3]/div[1]/div/div[3]/div[1]/div[7]/a"));
         //((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();",memory);
         memory.click();
@@ -135,26 +139,22 @@ public class SeleniumTest {
         WebElement apply_btn = driver.findElement(By.xpath("/html/body/div[1]/div/div[3]/div[1]/div/div[3]/div[2]/div/button[1]"));
         apply_btn.click();
 
-        try {
-            Thread.sleep(5000);
-        }
-        catch (InterruptedException e)
-        {
 
+        boolean isTopOfPage = false;
+        while (!isTopOfPage) {
+           Boolean result =  (Boolean)(((JavascriptExecutor) driver).executeScript("return window.pageYOffset<300"));
+           isTopOfPage=result.booleanValue();
+            logger.info("Is top of page: " + result);
         }
+
+        //wait.until(ExpectedConditions.elementToBeClickable(By.xpath("\"/html/body/div[1]/div/div[2]/div[2]/div[1]/div[2]/a/span[1]\"")));
+        //wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[5]/div/label[2]/span")));
 
         WebElement sortVariant = driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/div[2]/div[1]/div[2]/a/span[1]"));
         sortVariant.click();
         WebElement firstExpensive = driver.findElement(By.xpath("/html/body/div[5]/div/label[2]/span"));
         firstExpensive.click();
 
-        try {
-            Thread.sleep(5000);
-        }
-        catch (InterruptedException e)
-        {
-
-        }
         WebElement firstItem = driver.findElement(By.className("catalog-product__name"));
         String href=firstItem.getAttribute("href");
         driver.get(href);
