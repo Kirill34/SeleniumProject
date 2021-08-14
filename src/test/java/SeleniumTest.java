@@ -95,6 +95,7 @@ public class SeleniumTest {
     public void SecondTest()
     {
         driver.get("https://www.dns-shop.ru/");
+        ((JavascriptExecutor)driver).executeScript("setTimeout(()=>{document.documentElement.requestFullscreen()}, 500)");
         driver.manage().window().fullscreen();
         String buttonok = "//a[normalize-space(text())='Да']";
         WebElement elementok = driver.findElement(By.className("btn-additional"));
@@ -106,6 +107,7 @@ public class SeleniumTest {
         actions.moveToElement(smartphones_and_gadgets).build().perform();
         WebElement smartphone_link = driver.findElement(By.xpath("//*[@id=\"homepage-desktop-menu-wrap\"]/div/div[2]/div[2]/div[1]/a[1]"));
         smartphone_link.click();
+        //((JavascriptExecutor)driver).executeScript("document.documentElement.requestFullscreen();");
         try {
             File file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             BufferedImage image = ImageIO.read(file);
@@ -140,18 +142,28 @@ public class SeleniumTest {
         apply_btn.click();
 
 
-        boolean isTopOfPage = false;
+       boolean isTopOfPage = false;
         while (!isTopOfPage) {
-           Boolean result =  (Boolean)(((JavascriptExecutor) driver).executeScript("return window.pageYOffset<300"));
+           Boolean result =  (Boolean)(((JavascriptExecutor) driver).executeScript("return (document.readyState === \"complete\")"));
            isTopOfPage=result.booleanValue();
             logger.info("Is top of page: " + result);
         }
 
-        //wait.until(ExpectedConditions.elementToBeClickable(By.xpath("\"/html/body/div[1]/div/div[2]/div[2]/div[1]/div[2]/a/span[1]\"")));
-        //wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[5]/div/label[2]/span")));
+        ((JavascriptExecutor) driver).executeScript("window.scroll(0,0);");
 
-        WebElement sortVariant = driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/div[2]/div[1]/div[2]/a/span[1]"));
+
+        try {
+            Thread.sleep(3000);
+        }
+        catch (InterruptedException e)
+        {
+
+        }
+
+        wait.until(ExpectedConditions.elementToBeClickable(By.className("top-filter")));
+        WebElement sortVariant = driver.findElement(By.className("top-filter"));
         sortVariant.click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[5]/div/label[2]/span")));
         WebElement firstExpensive = driver.findElement(By.xpath("/html/body/div[5]/div/label[2]/span"));
         firstExpensive.click();
 
