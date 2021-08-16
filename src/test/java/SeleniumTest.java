@@ -24,6 +24,7 @@ import java.io.File;
 import java.time.Duration;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -95,7 +96,6 @@ public class SeleniumTest {
     public void SecondTest()
     {
         driver.get("https://www.dns-shop.ru/");
-        ((JavascriptExecutor)driver).executeScript("setTimeout(()=>{document.documentElement.requestFullscreen()}, 500)");
         driver.manage().window().fullscreen();
         String buttonok = "//a[normalize-space(text())='Да']";
         WebElement elementok = driver.findElement(By.className("btn-additional"));
@@ -107,7 +107,6 @@ public class SeleniumTest {
         actions.moveToElement(smartphones_and_gadgets).build().perform();
         WebElement smartphone_link = driver.findElement(By.xpath("//*[@id=\"homepage-desktop-menu-wrap\"]/div/div[2]/div[2]/div[1]/a[1]"));
         smartphone_link.click();
-        //((JavascriptExecutor)driver).executeScript("document.documentElement.requestFullscreen();");
         try {
             File file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             BufferedImage image = ImageIO.read(file);
@@ -118,60 +117,45 @@ public class SeleniumTest {
         {
             logger.info("Не удалось сделать скриншот");
         }
-        //WebElement samsung = driver.findElement(By.xpath("/html/body/div[1]/div/div[3]/div[1]/div/div[3]/div[1]/div[5]/div/div/div[2]/label[20]/span[2]"));
         WebElement allProducts = driver.findElement(By.xpath("/html/body/div[1]/div/div[3]/div[1]/div/div[3]/div[1]/div[1]/div/div/div[2]/label[3]/span"));
         allProducts.click();
         FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).ignoring(NoSuchElementException.class);
-        ((JavascriptExecutor)driver).executeScript("window.scroll(0,800);");
-        WebElement samsung = wait.until(new Function<WebDriver, WebElement>() {
-            public WebElement apply(WebDriver driver)
-            {
-                return driver.findElement(By.xpath("/html/body/div[1]/div/div[3]/div[1]/div/div[3]/div[1]/div[5]/div/div/div[2]/label[20]/span[2]"));
-            }
-        });
-       // ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();",samsung);
-        samsung.click();
-        WebElement memory = driver.findElement(By.xpath("/html/body/div[1]/div/div[3]/div[1]/div/div[3]/div[1]/div[7]/a"));
-        //((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();",memory);
-        memory.click();
         ((JavascriptExecutor)driver).executeScript("window.scroll(0,1000);");
 
-        WebElement gb8 = driver.findElement(By.xpath("/html/body/div[1]/div/div[3]/div[1]/div/div[3]/div[1]/div[7]/div/div/div[2]/label[2]"));
-        gb8.click();
-        WebElement apply_btn = driver.findElement(By.xpath("/html/body/div[1]/div/div[3]/div[1]/div/div[3]/div[2]/div/button[1]"));
-        apply_btn.click();
+        ((JavascriptExecutor) driver).executeScript("document.querySelector(\"body > div.container.category-child > div > div.products-page__content > div.products-page__left-block.is-affixed > div > div.left-filters > div.left-filters__list > div:nth-child(5) > div > div > div.ui-checkbox-group.ui-checkbox-group_list > label:nth-child(21) > input\").click()");
+
+
+        WebElement memory = driver.findElement(By.xpath("/html/body/div[1]/div/div[3]/div[1]/div/div[3]/div[1]/div[7]/a"));
+        memory.click();
+        ((JavascriptExecutor)driver).executeScript("window.scroll(0,1000);");
+        ((JavascriptExecutor) driver).executeScript("document.querySelector(\"body > div.container.category-child > div > div.products-page__content > div.products-page__left-block.is-affixed > div > div.left-filters > div.left-filters__list > div:nth-child(7) > div > div > div.ui-checkbox-group.ui-checkbox-group_list > label:nth-child(2)\").click()");
+        ((JavascriptExecutor)driver).executeScript("window.scroll(0,1600);");
+       ((JavascriptExecutor) driver).executeScript("document.querySelector(\"body > div.container.category-child > div > div.products-page__content > div.products-page__left-block.is-affixed > div > div.left-filters > div.left-filters__buttons > div > button.button-ui.button-ui_brand.left-filters__button\").click()");
 
 
        boolean isTopOfPage = false;
         while (!isTopOfPage) {
-           Boolean result =  (Boolean)(((JavascriptExecutor) driver).executeScript("return (document.readyState === \"complete\")"));
+           Boolean result =  (Boolean)(((JavascriptExecutor) driver).executeScript("return (window.pageYOffset<300)"));
            isTopOfPage=result.booleanValue();
             logger.info("Is top of page: " + result);
         }
 
         ((JavascriptExecutor) driver).executeScript("window.scroll(0,0);");
+        ((JavascriptExecutor) driver).executeScript("document.querySelector(\".top-filter__selected\").click()");
+        ((JavascriptExecutor) driver).executeScript("document.querySelector(\"body > div.popover-block.popover-block_show > div > label:nth-child(2) > input\").click()");
 
-
-        try {
-            Thread.sleep(3000);
+        boolean pageLoaded = false;
+        while (!pageLoaded) {
+            Boolean loaded = (Boolean) ((JavascriptExecutor) driver).executeScript(" return (document.readyState === \"complete\")");
+            pageLoaded=loaded.booleanValue();
         }
-        catch (InterruptedException e)
-        {
-
-        }
-
-        wait.until(ExpectedConditions.elementToBeClickable(By.className("top-filter")));
-        WebElement sortVariant = driver.findElement(By.className("top-filter"));
-        sortVariant.click();
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[5]/div/label[2]/span")));
-        WebElement firstExpensive = driver.findElement(By.xpath("/html/body/div[5]/div/label[2]/span"));
-        firstExpensive.click();
 
         WebElement firstItem = driver.findElement(By.className("catalog-product__name"));
         String href=firstItem.getAttribute("href");
         driver.get(href);
+        ((JavascriptExecutor) driver).executeScript("window.open(arguments[0], \"window2\")",href);
 
-        boolean pageLoaded = false;
+        pageLoaded = false;
         while (!pageLoaded) {
             Boolean loaded = (Boolean) ((JavascriptExecutor) driver).executeScript(" return (document.readyState === \"complete\")");
             pageLoaded=loaded.booleanValue();
@@ -187,7 +171,9 @@ public class SeleniumTest {
         {
             logger.info("Не удалось сделать скриншот");
         }
-       // firstItem.click();
+        ((JavascriptExecutor) driver).executeScript("document.querySelector(\"div.product-card-tabs__list > a:nth-child(4)\").click()");
+        String memory_value = ((JavascriptExecutor) driver).executeScript("return document.querySelector(\"tbody > tr:nth-child(39) > td:nth-child(2)\").textContent").toString();
+
         try {
             Thread.sleep(10000);
         }
@@ -195,7 +181,9 @@ public class SeleniumTest {
         {
 
         }
-        Assert.assertTrue(true);
+
+     /**/
+        Assert.assertTrue(memory_value=="8 Гб");
     }
 
     @AfterClass
