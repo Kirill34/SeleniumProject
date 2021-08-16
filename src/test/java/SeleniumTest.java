@@ -38,7 +38,6 @@ public class SeleniumTest {
 
         String env = System.getProperty("browser", "chrome");
         String strategy = System.getProperty("option","none");
-        System.setProperty("webdriver.gecko.driver", "C:/webdrivers/geckodriver.exe");
         driver = DriverFactory.getDriver(env.toLowerCase(), strategy.toLowerCase());
         driver.manage().window().fullscreen();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
