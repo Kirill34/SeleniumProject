@@ -153,7 +153,6 @@ public class SeleniumTest {
         WebElement firstItem = driver.findElement(By.className("catalog-product__name"));
         String href=firstItem.getAttribute("href");
         driver.get(href);
-        ((JavascriptExecutor) driver).executeScript("window.open(arguments[0], \"window2\")",href);
 
         pageLoaded = false;
         while (!pageLoaded) {
@@ -172,7 +171,22 @@ public class SeleniumTest {
             logger.info("Не удалось сделать скриншот");
         }
         ((JavascriptExecutor) driver).executeScript("document.querySelector(\"div.product-card-tabs__list > a:nth-child(4)\").click()");
-        String memory_value = ((JavascriptExecutor) driver).executeScript("return document.querySelector(\"tbody > tr:nth-child(39) > td:nth-child(2)\").textContent").toString();
+        pageLoaded = false;
+        while (!pageLoaded) {
+            Boolean loaded = (Boolean) ((JavascriptExecutor) driver).executeScript(" if (document.querySelector(\"tbody\")) return true; else return false; ");
+            pageLoaded=loaded.booleanValue();
+        }
+
+
+        String characters_js = "var result=false;\n"+
+                "var arr=document.querySelector(\"tbody\").childNodes\n"+
+                "arr.forEach(function(item, i, arr) {\n" +
+                "text=(item.textContent)\n" +
+                "if (text==\" Объем встроенной памяти  8 ГБ\") result=true;\n" +
+                "})\n"+
+                "return result;";
+
+        Boolean memory_value = (Boolean)((JavascriptExecutor) driver).executeScript(characters_js);
 
         try {
             Thread.sleep(10000);
@@ -183,7 +197,7 @@ public class SeleniumTest {
         }
 
      /**/
-        Assert.assertTrue(memory_value=="8 Гб");
+        Assert.assertTrue(memory_value.booleanValue());
     }
 
     @AfterClass
