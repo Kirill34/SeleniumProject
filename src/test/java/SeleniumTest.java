@@ -13,10 +13,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.Locatable;
 import org.openqa.selenium.support.events.WebDriverEventListener;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -27,6 +24,8 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+
+import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
 
 public class SeleniumTest {
     private static WebDriver driver;
@@ -101,10 +100,10 @@ public class SeleniumTest {
         logger.info("WebElement: " + elementok.getTagName() + " = " + elementok.getText());
         elementok.click();
         logger.info("Закрыто подтверждение города");
-        WebElement smartphones_and_gadgets = driver.findElement(By.linkText("Смартфоны и гаджеты"));
+        WebElement smartphones_and_gadgets = wait.until(presenceOfElementLocated(By.linkText("Смартфоны и гаджеты")));
         Actions actions = new Actions(driver);
         actions.moveToElement(smartphones_and_gadgets).build().perform();
-        WebElement smartphone_link = driver.findElement(By.xpath("//*[@id=\"homepage-desktop-menu-wrap\"]/div/div[2]/div[2]/div[1]/a[1]"));
+        WebElement smartphone_link = wait.until(presenceOfElementLocated(By.xpath("//a[normalize-space(text())='Смартфоны']")));
         smartphone_link.click();
         try {
             File file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
@@ -116,10 +115,57 @@ public class SeleniumTest {
         {
             logger.info("Не удалось сделать скриншот");
         }
-        WebElement allProducts = driver.findElement(By.xpath("/html/body/div[1]/div/div[3]/div[1]/div/div[3]/div[1]/div[1]/div/div/div[2]/label[3]/span"));
+        WebElement allProducts = driver.findElement(By.xpath("//span[normalize-space(text())='Все товары, включая отсутствующие в продаже']"));
         allProducts.click();
-        FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).ignoring(NoSuchElementException.class);
         ((JavascriptExecutor)driver).executeScript("window.scroll(0,1000);");
+        WebElement producer = driver.findElement(By.xpath("//span[normalize-space(text())='Samsung']"));
+        producer.click();
+        WebElement chooseProducer = driver.findElement(By.xpath("//span[normalize-space(text())='Производитель']"));
+        chooseProducer.click();
+        ((JavascriptExecutor)driver).executeScript("window.scroll(0,1200);");
+        WebElement memory_choose = driver.findElement(By.xpath("//a/span[normalize-space(text())='Объем оперативной памяти']"));
+        memory_choose.click();
+        List<WebElement> showAll = driver.findElements(By.xpath("//span[normalize-space(text())='Показать всё']"));
+        for (WebElement showAll_element: showAll) {
+            if (showAll_element.isDisplayed())
+                showAll_element.click();
+        }
+
+
+        WebElement memory8gb = driver.findElement(By.xpath("//span[normalize-space(text())='8 Гб']"));
+        memory8gb.click();
+        WebElement applyBtn = driver.findElement(By.xpath("//button[normalize-space(text())='Применить']"));
+        applyBtn.click();
+
+        boolean pageLoaded = false;
+        while (!pageLoaded) {
+            Boolean loaded = (Boolean) ((JavascriptExecutor) driver).executeScript(" return (document.getElementsByClassName(\"picked-filter__close\").length ==6)");
+            pageLoaded=loaded.booleanValue();
+        }
+
+        WebElement firstProduct = wait.until(presenceOfElementLocated(By.className("catalog-product__name")));
+        firstProduct.click();
+
+        pageLoaded = false;
+        while (!pageLoaded) {
+            Boolean loaded = (Boolean) ((JavascriptExecutor) driver).executeScript(" return (document.readyState === \"complete\")");
+            pageLoaded=loaded.booleanValue();
+        }
+
+        try {
+            File file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+            BufferedImage image = ImageIO.read(file);
+            ImageIO.write(image, "png", new File("screenshot2.png"));
+            Assert.assertTrue(true);
+        }
+        catch (java.io.IOException e)
+        {
+            logger.info("Не удалось сделать скриншот");
+        }
+
+
+        /*
+        FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).ignoring(NoSuchElementException.class);
 
         ((JavascriptExecutor) driver).executeScript("document.querySelector(\"body > div.container.category-child > div > div.products-page__content > div.products-page__left-block.is-affixed > div > div.left-filters > div.left-filters__list > div:nth-child(5) > div > div > div.ui-checkbox-group.ui-checkbox-group_list > label:nth-child(21) > input\").click()");
 
@@ -196,7 +242,7 @@ public class SeleniumTest {
         }
 
      /**/
-        Assert.assertTrue(memory_value.booleanValue());
+        //Assert.assertTrue(memory_value.booleanValue());
     }
 
     @AfterClass
