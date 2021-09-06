@@ -179,7 +179,6 @@ public class SeleniumTest {
             }
         }
         Assert.assertTrue(isMemory8GB);
-        //Assert.assertTrue(memory_value.booleanValue());
     }
 
     @AfterClass
