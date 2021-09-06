@@ -144,7 +144,8 @@ public class SeleniumTest {
         }
 
         WebElement firstProduct = wait.until(presenceOfElementLocated(By.className("catalog-product__name")));
-        firstProduct.click();
+        String first_url = firstProduct.getAttribute("href");
+        driver.get(first_url);
 
         pageLoaded = false;
         while (!pageLoaded) {
@@ -163,6 +164,21 @@ public class SeleniumTest {
             logger.info("Не удалось сделать скриншот");
         }
 
+        ((JavascriptExecutor)driver).executeScript("window.scroll(0,500);");
+        WebElement characters = driver.findElement(By.xpath("//a[normalize-space(text())='Характеристики']"));
+        characters.click();
+
+        boolean isMemory8GB=false;
+        List<WebElement> trs = driver.findElements(By.xpath("//tr"));
+        for (WebElement tr: trs) {
+            List<WebElement> tds=tr.findElements(By.tagName("td"));
+            logger.info(tds.get(0).getText());
+            if (tds.size()==2 && tds.get(0).getText().contains("Объем оперативной памяти") && tds.get(1).getText().contains("8 Гб"))
+            {
+                isMemory8GB=true;
+            }
+        }
+        Assert.assertTrue(isMemory8GB);
         //Assert.assertTrue(memory_value.booleanValue());
     }
 
